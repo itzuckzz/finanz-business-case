@@ -6,7 +6,7 @@ import { useUtente } from "@/components/Providers";
 import { Scheda, SchedaDomanda } from "@/components/Schede";
 import { Chip, Icona, LessonChrome, PrimaryButton, SecondaryButton, SheetScheda } from "@/components/ui";
 import { LEZIONI, PERCORSO, QUIZ } from "@/lib/percorso";
-import { useSchede } from "@/lib/navigazione";
+import { segnaRitornoAllaMappa, useSchede } from "@/lib/navigazione";
 import { invitoDopoLezione2, PROFILO } from "@/lib/partner";
 
 export function Sessione() {
@@ -82,7 +82,10 @@ function LezioneCompletata({ indice, nuova, vai, esci }: { indice: number; nuova
   const invito = indice === 1 && nuova && invitoDopoLezione2(utente.ramo, PROFILO[utente.onboarding_intent]);
 
   const prosegui = () => {
-    if (invito) return router.push("/percorso/partner?da=lezione2");
+    if (invito) {
+      segnaRitornoAllaMappa();
+      return router.push("/percorso/partner?da=lezione2");
+    }
     vai(ultima ? { n: "quiz", c: 0 } : { n: indice + 2, c: 0 });
   };
 

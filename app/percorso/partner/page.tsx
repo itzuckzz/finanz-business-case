@@ -7,6 +7,7 @@ import { Blocco } from "@/components/BlocchiPartner";
 import { BottomBar, ChipStato, Icona, PrimaryButton, SecondaryButton, TastoTondo } from "@/components/ui";
 import { INGRESSI, PROFILO, SCHERMATE, secondoBottone, type Ingresso, type Profilo, type SchermataPartner as Testi } from "@/lib/partner";
 import { NOME_RAMO, type Ramo } from "@/lib/utenti";
+import { useRitornoAllaMappa } from "@/lib/navigazione";
 
 const OGGETTO: Partial<Record<Ramo, string>> = { casa: "casa del tuo immobile" };
 const AVVISO: Partial<Record<Ramo, string>> = { vita: "Ti chiederemo anche qualche dato sulla tua salute." };
@@ -27,6 +28,7 @@ function SchermataPartner() {
   const { caricato, utente, progresso, track, toast, impostaPromemoria } = useUtente();
   const router = useRouter();
   const params = useSearchParams();
+  const { allaMappa, allaLezione } = useRitornoAllaMappa();
   const tracciato = useRef(false);
   const inizio = useRef(0);
   const scroll = useRef(0);
@@ -74,19 +76,21 @@ function SchermataPartner() {
     router.push("/comparatore");
   };
   // Chi arriva da dentro il percorso ci torna, gli altri vanno alla Home.
-  const ritorno = ingresso === "lezione2" || ingresso === "mappa" ? "/percorso" : "/";
-  const esci = (tipo: "close" | "home" | "reminder" | "continue" | "back_to_path", dove: string) => {
+  // Verso la mappa si riavvolge la cronologia: da lì "indietro" deve portare alla Home, non di nuovo qui.
+  const allaHome = () => router.push("/");
+  const ritorno = ingresso === "lezione2" || ingresso === "mappa" ? allaMappa : allaHome;
+  const esci = (tipo: "close" | "home" | "reminder" | "continue" | "back_to_path", vai: () => void) => {
     track("Partner Screen Exited", { exit_type: tipo, ...misure() });
-    router.push(dove);
+    vai();
   };
   const chiudi = () => esci("close", ritorno);
-  const home = () => esci("home", "/");
+  const home = () => esci("home", allaHome);
 
   if (!testi) return <Originale ramo={ramo} onConfronta={confronta} onChiudi={chiudi} onHome={home} />;
 
   const secondo = {
-    prosegui: { testo: "Prosegui", azione: () => esci("continue", "/percorso/lezione?n=3&c=0") },
-    percorso: { testo: "Torna al percorso", azione: () => esci("back_to_path", "/percorso") },
+    prosegui: { testo: "Prosegui", azione: () => esci("continue", () => allaLezione("/percorso/lezione?n=3&c=0")) },
+    percorso: { testo: "Torna al percorso", azione: () => esci("back_to_path", allaMappa) },
     home: { testo: "Torna alla Home", azione: home },
     promemoria: {
       testo: "Ricordamelo",
