@@ -12,6 +12,9 @@ import { LEZIONI, PERCORSO } from "@/lib/percorso";
 export function PannelloTester({ onClose }: { onClose: () => void }) {
   const { utente, setUtente, progresso, impostaProgresso, impostaPromemoria, toast } = useUtente();
   const router = useRouter();
+  // Chi vede la schermata partner a metà percorso è anche chi può chiedere il promemoria:
+  // non chi ha risposto "No", non i rami senza testi nuovi. Gli altri non hanno le due scorciatoie.
+  const aMeta = invitoDopoLezione2(utente.ramo, PROFILO[utente.onboarding_intent]);
 
   const salta = (lezioni: number, quiz: boolean, dove: string, messaggio: string) => {
     const kiwiExtra = LEZIONI.slice(0, lezioni).reduce((s, l) => s + l.kiwi, 0) + (quiz ? PERCORSO.kiwiTraguardo : 0);
@@ -56,35 +59,34 @@ export function PannelloTester({ onClose }: { onClose: () => void }) {
           Vai al quiz finale
         </button>
         <button
-          className="rounded-2xl bg-soft px-2 py-3"
+          className={`rounded-2xl bg-soft px-2 py-3 ${aMeta ? "" : "col-span-2"}`}
           onClick={() => salta(LEZIONI.length, true, "/percorso/partner", "Percorso completato")}
         >
           Vai alla schermata partner
         </button>
-        <button
-          className="rounded-2xl bg-soft px-2 py-3"
-          onClick={() => {
-            // Chi ha risposto "No" e i rami senza testi nuovi non la vedono a metà percorso.
-            if (!invitoDopoLezione2(utente.ramo, PROFILO[utente.onboarding_intent]))
-              return toast(`${utente.nome} non la vede dopo la lezione 2`);
-            salta(2, false, "/percorso/partner?da=lezione2", "Lezione 2 completata");
-          }}
-        >
-          Schermata dopo la lezione 2
-        </button>
-        {/* Nella realtà il promemoria arriva da solo dopo una settimana. */}
-        <button
-          className="col-span-2 rounded-2xl bg-soft px-2 py-3 disabled:text-ink/30"
-          disabled={progresso.promemoria !== "chiesto"}
-          onClick={() => {
-            impostaPromemoria("arrivato");
-            onClose();
-            toast("Una settimana dopo: promemoria in Home");
-            router.push("/");
-          }}
-        >
-          Fai arrivare il promemoria
-        </button>
+        {aMeta && (
+          <>
+            <button
+              className="rounded-2xl bg-soft px-2 py-3"
+              onClick={() => salta(2, false, "/percorso/partner?da=lezione2", "Lezione 2 completata")}
+            >
+              Schermata dopo la lezione 2
+            </button>
+            {/* Nella realtà il promemoria arriva da solo dopo una settimana. */}
+            <button
+              className="col-span-2 rounded-2xl bg-soft px-2 py-3 disabled:text-ink/30"
+              disabled={progresso.promemoria !== "chiesto"}
+              onClick={() => {
+                impostaPromemoria("arrivato");
+                onClose();
+                toast("Una settimana dopo: promemoria in Home");
+                router.push("/");
+              }}
+            >
+              Fai arrivare il promemoria
+            </button>
+          </>
+        )}
       </div>
     </Sheet>
   );
