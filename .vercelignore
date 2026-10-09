@@ -1,0 +1,2 @@
+# File di lavoro locali: non vanno online nemmeno con un deploy fatto dal computer.
+public/_*.html
