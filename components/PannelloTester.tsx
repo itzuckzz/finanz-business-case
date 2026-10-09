@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUtente, VUOTO } from "@/components/Providers";
 import { Sheet } from "@/components/ui";
 import { UTENTI, NOME_RAMO } from "@/lib/utenti";
+import { invitoDopoLezione2, PROFILO } from "@/lib/partner";
 import { LEZIONI, PERCORSO } from "@/lib/percorso";
 
 // Strumenti per chi prova il prototipo: non esistono nell'app vera.
@@ -60,9 +61,20 @@ export function PannelloTester({ onClose }: { onClose: () => void }) {
         >
           Vai alla schermata partner
         </button>
+        <button
+          className="rounded-2xl bg-soft px-2 py-3"
+          onClick={() => {
+            // Chi ha risposto "No" e i rami senza testi nuovi non la vedono a metà percorso.
+            if (!invitoDopoLezione2(utente.ramo, PROFILO[utente.onboarding_intent]))
+              return toast(`${utente.nome} non la vede dopo la lezione 2`);
+            salta(2, false, "/percorso/partner?da=lezione2", "Lezione 2 completata");
+          }}
+        >
+          Schermata dopo la lezione 2
+        </button>
         {/* Nella realtà il promemoria arriva da solo dopo una settimana. */}
         <button
-          className="rounded-2xl bg-soft px-2 py-3 disabled:text-ink/30"
+          className="col-span-2 rounded-2xl bg-soft px-2 py-3 disabled:text-ink/30"
           disabled={progresso.promemoria !== "chiesto"}
           onClick={() => {
             impostaPromemoria("arrivato");
