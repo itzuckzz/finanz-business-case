@@ -1,7 +1,6 @@
 // Testi della schermata partner nuova: una schermata per ramo e per risposta di onboarding.
 // Il profilo decide la leva e il blocco centrale, il ramo riempie i nomi.
-// Stessi testi del mock approvato (build_mock.py). La vita non ha ancora
-// testi approvati: per quel ramo resta la schermata originale.
+// Stessi testi del mock approvato (build_mock.py): cinque rami per tre profili.
 
 import type { Intento, Ramo } from "@/lib/utenti";
 
@@ -20,7 +19,8 @@ type Colonna = { colore: Colore; intestazione: string; voci: { icona: string; no
 
 export type BloccoPartner =
   | { tipo: "passi" }
-  | { tipo: "vero_falso"; frase: string }
+  | { tipo: "vero_falso"; frase: string[]; spiegazione: string[] }
+  | { tipo: "tre_righe"; badge: string; righe: { icona: string; nome: string; testo: string }[] }
   | { tipo: "due_numeri"; badge: string; titolo: string; sx: Numero; dx: Numero; fonte?: string }
   | { tipo: "un_numero"; badge: string; titolo: string; numero: Numero; fonte?: string }
   | { tipo: "categorie"; badge: string; titolo: string; sx: Colonna; dx: Colonna }
@@ -71,7 +71,11 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
       titolo: ["RC auto: quanto ti costa oggi?"],
       bianca: "Confronta i preventivi con quanto paghi ora.",
       blocchi: [
-        { tipo: "vero_falso", frase: "Due compagnie ti chiedono lo stesso prezzo per la stessa auto." },
+        {
+          tipo: "vero_falso",
+          frase: ["Due compagnie ti chiedono lo stesso prezzo per la stessa auto."],
+          spiegazione: ["Il prezzo ha due ingredienti: il rischio e i costi di gestione. Ogni compagnia ha i suoi."],
+        },
         { tipo: "giallo", icona: "🗓️", forte: "Prima di rinnovare, confronta.", resto: "A ogni scadenza puoi cambiare compagnia." },
       ],
       nota: "Tieni la polizza sotto mano: i dati sono lì.",
@@ -192,8 +196,8 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
         {
           tipo: "un_numero",
           badge: "🦷 Il conto del dentista",
-          titolo: "Entri per un controllo, esci con:",
-          numero: { colore: "rosa", etichetta: "Una spesa media di", numero: "462€", sotto: "senza polizza li paghi tu" },
+          titolo: "Un ciclo di cure dal dentista costa:",
+          numero: { colore: "rosa", etichetta: "In media", numero: "462€", sotto: "senza polizza li paghi tu" },
           fonte: "Key-Stone, osservatorio OmniSalus, 2025. 10.880 intervistati.",
         },
         { tipo: "giallo", icona: "🦷", forte: "L'imprevisto non avvisa.", resto: "Meglio se il conto non è solo tuo." },
@@ -235,6 +239,51 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
         { tipo: "giallo", icona: "🦷", forte: "Rimandare non cura i denti.", resto: "Anzi, può far salire il conto." },
       ],
       nota: "Non hai una polizza? Scopri quanto costerebbe.",
+    },
+  },
+  vita: {
+    pensando: {
+      titolo: ["Troppo presto", "per pensarci?"],
+      bianca: "L'età fa la differenza.",
+      blocchi: [
+        {
+          tipo: "vero_falso",
+          frase: ["Una polizza vita costa uguale", "a 20 e a 40 anni."],
+          spiegazione: ["Il prezzo nasce dal rischio.", "Più sei giovane, meno costa."],
+        },
+        { tipo: "giallo", icona: "👨‍👩‍👧", forte: "Prima ci pensi, meglio è.", resto: "Per proteggere chi ami." },
+      ],
+      nota: "Ci stai pensando? Servono età e dati di salute.",
+    },
+    ha: {
+      titolo: ["Stesso prezzo,", "stessa polizza?"],
+      bianca: "Sembrano uguali finché non le apri.",
+      blocchi: [
+        {
+          tipo: "tre_righe",
+          badge: "🔍 Cosa confrontare",
+          righe: [
+            { icona: "💶", nome: "Il capitale", testo: "Quanto lascia a chi ami." },
+            { icona: "📅", nome: "La durata", testo: "Per quanti anni sei coperto." },
+            { icona: "🚫", nome: "Le esclusioni", testo: "I casi in cui non paga." },
+          ],
+        },
+        { tipo: "giallo", icona: "📄", forte: "Il prezzo non dice tutto.", resto: "Lo vedi solo confrontandole." },
+      ],
+      nota: "Hai già una polizza vita? Confrontala.",
+    },
+    no: {
+      titolo: ["Non è per te.", "È per loro."],
+      bianca: "Per chi ami.",
+      blocchi: [
+        {
+          tipo: "vero_falso",
+          frase: ["I soldi di una polizza vita", "vanno agli eredi, per legge."],
+          spiegazione: ["Li riceve chi scegli tu,", "anche se non è un erede."],
+        },
+        { tipo: "giallo", icona: "👨‍👩‍👧", forte: "A te non serve. A loro sì.", resto: "E chi sono, lo decidi tu." },
+      ],
+      nota: "Non ne hai una? Scopri quanto costerebbe.",
     },
   },
 };

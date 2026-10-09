@@ -10,11 +10,11 @@ const PASSI = [
   { titolo: "Decidi tu", testo: "Chiederli è gratis e non ti impegna." },
 ];
 
-function Cornice({ badge, titolo, children }: { badge: string; titolo: string; children: React.ReactNode }) {
+function Cornice({ badge, titolo, children }: { badge: string; titolo?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-2.5 rounded-[22px] bg-badge-sondaggio px-3 pt-3 pb-2.5">
       <span className="rounded-full bg-white px-4 py-1.5 text-sm font-bold tracking-tight uppercase">{badge}</span>
-      <p className="text-center text-lg leading-snug font-bold tracking-tight">{titolo}</p>
+      {titolo && <p className="text-center text-lg leading-snug font-bold tracking-tight">{titolo}</p>}
       {children}
     </div>
   );
@@ -22,6 +22,15 @@ function Cornice({ badge, titolo, children }: { badge: string; titolo: string; c
 
 function Fonte({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <p className={`text-center text-[10.5px] leading-tight tracking-tight whitespace-nowrap text-muted ${className}`}>{children}</p>;
+}
+
+// Testo su più righe decise a mano, una voce per riga.
+function Righe({ testo }: { testo: string[] }) {
+  return testo.map((r) => (
+    <span key={r} className="block">
+      {r}
+    </span>
+  ));
 }
 
 function Aiuto({ children }: { children: React.ReactNode }) {
@@ -49,12 +58,31 @@ export function Blocco({ blocco: b }: { blocco: BloccoPartner }) {
     // Statico e già risolto: non è una domanda a cui rispondere.
     case "vero_falso":
       return (
-        <Cornice badge="🏷️ Vero o falso?" titolo={b.frase}>
+        <Cornice badge="🏷️ Vero o falso?" titolo={<Righe testo={b.frase} />}>
           <div className="grid w-full grid-cols-2 gap-2.5 font-semibold">
             <span className="grid h-[46px] place-items-center rounded-[14px] border-[1.5px] border-line bg-white text-muted">Vero</span>
             <span className="grid h-[46px] place-items-center rounded-[14px] bg-kiwi-400 text-forest">Falso ✓</span>
           </div>
-          <Aiuto>Il prezzo ha due ingredienti: il rischio e i costi di gestione. Ogni compagnia ha i suoi.</Aiuto>
+          <Aiuto>
+            <Righe testo={b.spiegazione} />
+          </Aiuto>
+        </Cornice>
+      );
+
+    case "tre_righe":
+      return (
+        <Cornice badge={b.badge}>
+          <ul className="flex w-full flex-col gap-2">
+            {b.righe.map((r) => (
+              <li key={r.nome} className="grid grid-cols-[34px_1fr] items-center gap-2.5 rounded-[14px] bg-white px-2.5 py-2 text-left">
+                <span className="grid size-[34px] place-items-center rounded-full bg-forest text-[15px]">{r.icona}</span>
+                <div>
+                  <b className="block text-[15.5px] leading-tight">{r.nome}</b>
+                  <small className="text-[13px] leading-tight text-muted">{r.testo}</small>
+                </div>
+              </li>
+            ))}
+          </ul>
         </Cornice>
       );
 
