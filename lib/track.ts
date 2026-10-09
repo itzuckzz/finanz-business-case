@@ -10,7 +10,16 @@ export type NomeEvento =
   | "Partner Screen Viewed"
   | "Partner CTA Clicked"
   | "Quote Requested"
-  | "Policy Activated";
+  | "Policy Activated"
+  | EventoNuovo;
+
+// Eventi che nell'export non ci sono: servono a leggere il test.
+// - Survey Answered: le risposte ai sondaggi delle lezioni, oggi buttate via
+// - Lesson Exited: chi abbandona esce a fine lezione o a metà?
+// - Partner Screen Exited: quanto resta sulla schermata chi non clicca, e da dove esce
+// - Partner Reminder Opened: chi torna alla schermata dal promemoria
+export const EVENTI_NUOVI = ["Survey Answered", "Lesson Exited", "Partner Screen Exited", "Partner Reminder Opened"] as const;
+export type EventoNuovo = (typeof EVENTI_NUOVI)[number];
 
 export type Evento = {
   event: NomeEvento;

@@ -25,6 +25,7 @@ export const UTENTI: Utente[] = [
   { id: "u4", nome: "Luca", eta: 23, os: "Android", onboarding_intent: "No", ramo: "rc_auto", kiwi: 90 },
   { id: "u5", nome: "Elena", eta: 38, os: "iOS", onboarding_intent: "No, ma sto pensando di farne una", ramo: "vita", kiwi: 2100 },
   { id: "u6", nome: "Paolo", eta: 52, os: "Android", onboarding_intent: "Sì, ne ho già una o più", ramo: "casa", kiwi: 430 },
+  { id: "u7", nome: "Chiara", eta: 31, os: "iOS", onboarding_intent: "No", ramo: "dentale", kiwi: 310 },
 ];
 
 export const NOME_RAMO: Record<Ramo, string> = {

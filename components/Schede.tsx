@@ -8,9 +8,30 @@ import { BottomBar, Icona, IconaEsito, PrimaryButton, SheetScheda } from "@/comp
 // onAvanti viene chiamato quando l'utente può passare alla card successiva;
 // per le domande riceve se la prima risposta data era giusta.
 
-export function Scheda({ card, onAvanti }: { card: Card; onAvanti: (primaGiusta?: boolean) => void }) {
+// Per i sondaggi, risposta è quella già data (se c'è) e onSondaggio riceve quella confermata.
+export function Scheda({
+  card,
+  onAvanti,
+  risposta,
+  onSondaggio,
+}: {
+  card: Card;
+  onAvanti: (primaGiusta?: boolean) => void;
+  risposta?: string;
+  onSondaggio?: (risposta: string) => void;
+}) {
   if (card.tipo === "teoria") return <SchedaTeoria card={card} onAvanti={() => onAvanti()} />;
-  if (card.tipo === "sondaggio") return <SchedaSondaggio card={card} onAvanti={() => onAvanti()} />;
+  if (card.tipo === "sondaggio")
+    return (
+      <SchedaSondaggio
+        card={card}
+        risposta={risposta}
+        onAvanti={(r) => {
+          onSondaggio?.(r);
+          onAvanti();
+        }}
+      />
+    );
   if (card.tipo === "simulatore") return <SchedaSimulatore card={card} onAvanti={() => onAvanti()} />;
   if (card.tipo === "vero_falso")
     return (
@@ -179,8 +200,17 @@ export function SchedaDomanda({
   );
 }
 
-function SchedaSondaggio({ card, onAvanti }: { card: Extract<Card, { tipo: "sondaggio" }>; onAvanti: () => void }) {
-  const [scelta, setScelta] = useState<number | null>(null);
+function SchedaSondaggio({
+  card,
+  risposta,
+  onAvanti,
+}: {
+  card: Extract<Card, { tipo: "sondaggio" }>;
+  risposta?: string;
+  onAvanti: (risposta: string) => void;
+}) {
+  const salvata = risposta === undefined ? -1 : card.risposte.indexOf(risposta);
+  const [scelta, setScelta] = useState<number | null>(salvata < 0 ? null : salvata);
   return (
     <>
       <Riquadro
@@ -207,7 +237,7 @@ function SchedaSondaggio({ card, onAvanti }: { card: Extract<Card, { tipo: "sond
         </div>
       </Riquadro>
       <BottomBar>
-        <PrimaryButton disabled={scelta === null} onClick={onAvanti}>
+        <PrimaryButton disabled={scelta === null} onClick={() => scelta !== null && onAvanti(card.risposte[scelta])}>
           Conferma risposta
         </PrimaryButton>
       </BottomBar>

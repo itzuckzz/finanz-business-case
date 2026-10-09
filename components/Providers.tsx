@@ -12,18 +12,23 @@ export type Progresso = {
   lezioni: number; // lezioni completate, da 0 a LEZIONI.length
   quiz: boolean;
   kiwiExtra: number;
+  sondaggi: Record<number, string>; // numero della lezione → risposta scelta
+  promemoria: "no" | "chiesto" | "arrivato"; // "Ricordamelo" sulla schermata partner
 };
 
-const VUOTO: Progresso = { lezioni: 0, quiz: false, kiwiExtra: 0 };
+export const VUOTO: Progresso = { lezioni: 0, quiz: false, kiwiExtra: 0, sondaggi: {}, promemoria: "no" };
 const STORAGE = "finanz-prototipo-v2";
 
 type Ctx = {
+  caricato: boolean; // utente e avanzamento letti dal browser
   utente: Utente;
   setUtente: (id: string) => void;
   progresso: Progresso;
   kiwi: number;
   completaLezione: (indice: number) => void;
   completaQuiz: (kiwi: number) => void;
+  rispondiSondaggio: (lezione: number, risposta: string) => void;
+  impostaPromemoria: (stato: Progresso["promemoria"]) => void;
   impostaProgresso: (p: Progresso) => void;
   track: (event: NomeEvento, properties?: Record<string, string | number>) => void;
   toast: (testo: string) => void;
@@ -67,11 +72,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }, [caricato, utenteId, progressi]);
 
   const utente = UTENTI.find((u) => u.id === utenteId) ?? UTENTI[0];
-  const progresso = progressi[utente.id] ?? VUOTO;
+  const progresso = { ...VUOTO, ...progressi[utente.id] };
   const kiwi = utente.kiwi + progresso.kiwiExtra;
 
   const aggiorna = useCallback(
-    (f: (p: Progresso) => Progresso) => setProgressi((all) => ({ ...all, [utenteId]: f(all[utenteId] ?? VUOTO) })),
+    (f: (p: Progresso) => Progresso) => setProgressi((all) => ({ ...all, [utenteId]: f({ ...VUOTO, ...all[utenteId] }) })),
     [utenteId],
   );
 
@@ -85,6 +90,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const completaQuiz = useCallback(
     (k: number) => aggiorna((p) => (p.quiz ? p : { ...p, quiz: true, kiwiExtra: p.kiwiExtra + k })),
+    [aggiorna],
+  );
+
+  const rispondiSondaggio = useCallback(
+    (lezione: number, risposta: string) => aggiorna((p) => ({ ...p, sondaggi: { ...p.sondaggi, [lezione]: risposta } })),
+    [aggiorna],
+  );
+
+  const impostaPromemoria = useCallback(
+    (stato: Progresso["promemoria"]) => aggiorna((p) => ({ ...p, promemoria: stato })),
     [aggiorna],
   );
 
@@ -115,7 +130,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <UtenteContext.Provider
-      value={{ utente, setUtente, progresso, kiwi, completaLezione, completaQuiz, impostaProgresso, track, toast }}
+      value={{ caricato, utente, setUtente, progresso, kiwi, completaLezione, completaQuiz, rispondiSondaggio, impostaPromemoria, impostaProgresso, track, toast }}
     >
       {children}
       {messaggio && (

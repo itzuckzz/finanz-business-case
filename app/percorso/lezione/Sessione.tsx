@@ -7,6 +7,7 @@ import { Scheda, SchedaDomanda } from "@/components/Schede";
 import { Chip, Icona, LessonChrome, PrimaryButton, SecondaryButton, SheetScheda } from "@/components/ui";
 import { LEZIONI, PERCORSO, QUIZ } from "@/lib/percorso";
 import { useSchede } from "@/lib/navigazione";
+import { invitoDopoLezione2, PROFILO } from "@/lib/partner";
 
 export function Sessione() {
   const { params, vai, esci } = useSchede();
@@ -38,10 +39,20 @@ function ConfermaUscita({ onResta, onEsci }: { onResta: () => void; onEsci: () =
 }
 
 function Lezione({ indice, c, vai, esci }: { indice: number; c: number } & Nav) {
-  const { track, progresso, completaLezione } = useUtente();
+  const { caricato, track, progresso, completaLezione, rispondiSondaggio } = useUtente();
   const [uscita, setUscita] = useState(false);
   const lezione = LEZIONI[indice];
   const card = lezione.card[Math.min(c, lezione.card.length - 1)];
+
+  const sondaggio = (risposta: string) => {
+    rispondiSondaggio(indice + 1, risposta);
+    track("Survey Answered", { lesson_number: indice + 1, question: card.tipo === "sondaggio" ? card.testo : "", answer: risposta });
+  };
+
+  const abbandona = () => {
+    track("Lesson Exited", { lesson_number: indice + 1, card_number: c + 1, cards_total: lezione.card.length });
+    esci();
+  };
 
   const avanti = () => {
     if (c < lezione.card.length - 1) return vai({ n: indice + 1, c: c + 1 });
@@ -55,17 +66,25 @@ function Lezione({ indice, c, vai, esci }: { indice: number; c: number } & Nav) 
   return (
     <div className="flex flex-1 flex-col">
       <LessonChrome progress={(c / lezione.card.length) * 100} onEsci={() => setUscita(true)} />
-      {/* key: tornando indietro la card riparte pulita */}
-      <Scheda key={c} card={card} onAvanti={avanti} />
-      {uscita && <ConfermaUscita onResta={() => setUscita(false)} onEsci={esci} />}
+      {/* key: tornando indietro la card riparte pulita, e dopo un ricaricamento ritrova la risposta salvata */}
+      <Scheda key={`${c}-${caricato}`} card={card} onAvanti={avanti} risposta={progresso.sondaggi[indice + 1]} onSondaggio={sondaggio} />
+      {uscita && <ConfermaUscita onResta={() => setUscita(false)} onEsci={abbandona} />}
     </div>
   );
 }
 
 function LezioneCompletata({ indice, nuova, vai, esci }: { indice: number; nuova: boolean } & Nav) {
-  const { kiwi } = useUtente();
+  const { kiwi, utente } = useUtente();
+  const router = useRouter();
   const lezione = LEZIONI[indice];
   const ultima = indice === LEZIONI.length - 1;
+  // A metà percorso, la prima volta: la schermata partner prima della lezione 3.
+  const invito = indice === 1 && nuova && invitoDopoLezione2(utente.ramo, PROFILO[utente.onboarding_intent]);
+
+  const prosegui = () => {
+    if (invito) return router.push("/percorso/partner?da=lezione2");
+    vai(ultima ? { n: "quiz", c: 0 } : { n: indice + 2, c: 0 });
+  };
 
   return (
     <div className="flex flex-1 flex-col bg-forest text-white">
@@ -107,7 +126,7 @@ function LezioneCompletata({ indice, nuova, vai, esci }: { indice: number; nuova
       </div>
 
       <div className="sticky bottom-0 px-4 pb-6">
-        <PrimaryButton onClick={() => vai(ultima ? { n: "quiz", c: 0 } : { n: indice + 2, c: 0 })}>
+        <PrimaryButton onClick={prosegui}>
           {ultima ? "Vai al quiz finale" : "Prosegui"}
         </PrimaryButton>
       </div>
@@ -150,7 +169,15 @@ function Quiz({ c, vai, esci }: { c: number } & Nav) {
         corretta={d.corretta}
         onAvanti={avanti}
       />
-      {uscita && <ConfermaUscita onResta={() => setUscita(false)} onEsci={esci} />}
+      {uscita && (
+        <ConfermaUscita
+          onResta={() => setUscita(false)}
+          onEsci={() => {
+            track("Lesson Exited", { lesson_number: "quiz", card_number: q + 1, cards_total: QUIZ.length });
+            esci();
+          }}
+        />
+      )}
     </div>
   );
 }
