@@ -24,6 +24,14 @@ export function segnaAperturaDallaMappa() {
   } catch {}
 }
 
+// Da chiamare sulla mappa prima di aprire la schermata partner dall'ingresso in mappa:
+// la mappa è una voce di cronologia più indietro.
+export function segnaRitornoDallaMappa() {
+  try {
+    sessionStorage.setItem(CHIAVE_RITORNO, "1");
+  } catch {}
+}
+
 function stato(): Stato {
   return (typeof window !== "undefined" && (window.history.state as Stato)) || {};
 }

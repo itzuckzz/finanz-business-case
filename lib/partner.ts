@@ -38,6 +38,19 @@ export type SchermataPartner = {
 };
 
 // Da dove si arriva alla schermata. Decide il secondo bottone.
+// Ingresso in mappa: una pillola fissa sopra le tappe, che apre la schermata partner.
+// Un testo per ramo, uguale per ogni risposta di onboarding: la leva per profilo la fa già
+// la schermata che si apre. È un gancio che quella schermata chiude: una domanda dove le due
+// schermate rispondono con un confronto, una frase da completare dove danno un finale netto.
+const FRASE = "Tocca per finire la frase";
+export const INGRESSO_MAPPA: Record<Ramo, { icona: string; titolo: string; sotto: string }> = {
+  rc_auto: { icona: "🚗", titolo: "Stessa auto, stesso prezzo?", sotto: "La risposta non è scontata" },
+  salute: { icona: "🩺", titolo: "Salute: pubblico o privato?", sotto: "Cambia l'attesa, e chi paga" },
+  casa: { icona: "🏠", titolo: "La polizza casa non è solo…", sotto: FRASE },
+  dentale: { icona: "🦷", titolo: "Il dentista lo paga…", sotto: FRASE },
+  vita: { icona: "❤️", titolo: "Una polizza vita cambia con…", sotto: FRASE },
+};
+
 export const INGRESSI = ["trofeo", "lezione2", "mappa", "promemoria"] as const;
 export type Ingresso = (typeof INGRESSI)[number];
 

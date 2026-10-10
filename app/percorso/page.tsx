@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useUtente } from "@/components/Providers";
 import { BarraProgresso, ChipStato, Icona, TastoTondo } from "@/components/ui";
 import { LEZIONI, PERCORSO } from "@/lib/percorso";
-import { segnaAperturaDallaMappa } from "@/lib/navigazione";
+import { segnaAperturaDallaMappa, segnaRitornoDallaMappa } from "@/lib/navigazione";
+import { INGRESSO_MAPPA, PROFILO } from "@/lib/partner";
 
 // Path Started parte una volta per utente e per sessione, all'apertura del percorso.
 const avviati = new Set<string>();
@@ -46,6 +47,13 @@ export default function MappaPercorso() {
     router.push(NODI[i].href);
   };
 
+  // L'ingresso in mappa non c'è per chi ha risposto "No": vede l'offerta solo alla fine.
+  const conIngresso = PROFILO[utente.onboarding_intent] !== "no";
+  const apriPartner = () => {
+    segnaRitornoDallaMappa();
+    router.push("/percorso/partner?da=mappa");
+  };
+
   const condividi = async () => {
     try {
       if (navigator.share) await navigator.share({ title: "Finanz", text: "Ho completato il percorso Assicurati su Finanz 🥝" });
@@ -77,7 +85,25 @@ export default function MappaPercorso() {
           📖 {LEZIONI.length} lezioni + quiz
         </span>
 
-        <div className="mt-10 flex items-center gap-3 rounded-2xl bg-soft px-3 py-3 font-semibold tracking-wide text-forest uppercase">
+        {conIngresso && (
+          <button
+            onClick={apriPartner}
+            className="mt-5 flex w-full items-center gap-3 rounded-full bg-forest py-2 pr-4 pl-2 text-left transition active:scale-[0.98]"
+          >
+            <span className="grid size-11 flex-none place-items-center rounded-full bg-kiwi-100 text-2xl">{INGRESSO_MAPPA[utente.ramo].icona}</span>
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <b className="text-base leading-tight tracking-tight text-white">{INGRESSO_MAPPA[utente.ramo].titolo}</b>
+              <small className="text-[13.5px] leading-tight text-kiwi-100">{INGRESSO_MAPPA[utente.ramo].sotto}</small>
+            </span>
+            <span className="flex-none text-kiwi-400">
+              <Icona nome="avanti" size={22} />
+            </span>
+          </button>
+        )}
+
+        <div
+          className={`${conIngresso ? "mt-3.5" : "mt-10"} flex items-center gap-3 rounded-2xl bg-soft px-3 py-3 font-semibold tracking-wide text-forest uppercase`}
+        >
           <span className="grid size-12 place-items-center rounded-full bg-line text-2xl">🤓</span>
           Livello 1
         </div>
