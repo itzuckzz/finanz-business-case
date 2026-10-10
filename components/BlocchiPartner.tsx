@@ -6,7 +6,7 @@ const SFONDO = { rosa: "bg-box-rosa", azzurro: "bg-box-azzurro" };
 
 const PASSI = [
   { titolo: "Compili un modulo", testo: "Sul sito del partner." },
-  { titolo: "Ricevi i preventivi via email", testo: "Entro 24 ore, da più compagnie." },
+  { titolo: "Ricevi i preventivi via email", testo: "In poco tempo, da più compagnie." },
   { titolo: "Decidi tu", testo: "Chiederli è gratis e non ti impegna." },
 ];
 
@@ -145,7 +145,13 @@ export function Blocco({ blocco: b }: { blocco: BloccoPartner }) {
               </div>
             ))}
           </div>
-          {b.sotto && <Aiuto>{b.sotto}</Aiuto>}
+          {b.sotto && (
+            <Aiuto>
+              {b.sotto.split("\n").map((r) => (
+                <span key={r} className="block">{r}</span>
+              ))}
+            </Aiuto>
+          )}
         </Cornice>
       );
 

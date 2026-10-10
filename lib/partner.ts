@@ -65,7 +65,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
       titolo: ["Quanto costa la tua RC auto?"],
       bianca: "Ci stai pensando. Ecco cosa succede dopo.",
       blocchi: [{ tipo: "passi" }],
-      nota: "Bastano 6 dati per ricevere i preventivi.",
+      nota: "Bastano pochi dati per ricevere i preventivi.",
     },
     ha: {
       titolo: ["RC auto: quanto ti costa oggi?"],
@@ -82,16 +82,18 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
     },
     no: {
       titolo: ["RC auto: quanto ti costerebbe?"],
-      bianca: "Guardare i prezzi non ti impegna.",
+      bianca: "Dipende da te, non solo dall'auto.",
       blocchi: [
         {
-          tipo: "due_numeri",
-          badge: "🚲 Ricordi la bici da 2.000€?",
-          titolo: "La polizza si fa prima che serva.",
-          sx: { colore: "rosa", etichetta: "Senza polizza", numero: "2.000€", sotto: "li paghi tu" },
-          dx: { colore: "azzurro", etichetta: "Con la polizza", numero: "0€", sotto: "paga la compagnia" },
+          tipo: "tre_righe",
+          badge: "🔍 Da cosa dipende",
+          righe: [
+            { icona: "🧑", nome: "Chi guida", testo: "Età, patente e incidenti passati." },
+            { icona: "📍", nome: "Dove vivi", testo: "Cambia da zona a zona." },
+            { icona: "🚗", nome: "Che auto hai", testo: "Conta anche la potenza." },
+          ],
         },
-        { tipo: "giallo", icona: "🚗", forte: "Se guidi, la polizza è obbligatoria.", resto: "Il prezzo no: cambia da compagnia a compagnia." },
+        { tipo: "giallo", icona: "📋", forte: "Se guidi, la polizza è obbligatoria.", resto: "Il prezzo no: lo scopri solo con un preventivo." },
       ],
       nota: "Ricevi solo i preventivi, senza acquistare niente.",
     },
@@ -111,7 +113,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
         },
         { tipo: "giallo", icona: "🩺", forte: "Nel privato paga la compagnia.", resto: "Con una polizza salute, nei limiti del contratto." },
       ],
-      nota: "Ci stai pensando? Bastano 6 dati per i preventivi.",
+      nota: "Ci stai pensando? Bastano pochi dati per i preventivi.",
     },
     ha: {
       titolo: ["Una polizza non", "copre tutto"],
@@ -130,7 +132,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
     },
     no: {
       titolo: ["Curarsi", "è gratis?"],
-      bianca: "Una famiglia spende 1.362€ l'anno in cure.",
+      bianca: "Una famiglia spende in media 1.362€ l'anno per la salute.",
       blocchi: [
         {
           tipo: "verticali",
@@ -138,7 +140,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
           titolo: "Una polizza non ferma il ladro. E nemmeno un problema di salute.",
           sx: SENZA,
           dx: CON,
-          sotto: "Cambia solo una cosa: chi paga il conto.",
+          sotto: "Cambia chi paga il conto.\nNei limiti del contratto.",
         },
         { tipo: "fonte", testo: "Spesa media per la salute a famiglia. ISTAT 2022, analisi GIMBE." },
       ],
@@ -153,7 +155,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
         { tipo: "verticali", badge: "💧 Un tubo che si rompe", titolo: "L'acqua scende di sotto. Chi paga?", sx: SENZA, dx: CON },
         { tipo: "giallo", icona: "🏠", forte: "Non protegge solo i tuoi muri.", resto: "Può coprire anche i danni agli altri." },
       ],
-      nota: "Ci stai pensando? Bastano 6 dati per i preventivi.",
+      nota: "Ci stai pensando? Bastano pochi dati per i preventivi.",
     },
     ha: {
       titolo: ["Il clima cambia.", "E casa tua?"],
@@ -181,7 +183,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
           badge: "🚲 Ricordi la bici rubata?",
           titolo: "Era una bici. In casa hai molto di più.",
           icone: ["👜", "💻", "📱", "💍", "⌚"],
-          sotto: ["Senza polizza le ricompri tu.", "Con la polizza paga la compagnia."],
+          sotto: ["Senza polizza le ricompri tu.", "Con la polizza giusta paga la compagnia."],
         },
         { tipo: "fonte", testo: "Furti del 2023. Censis su dati del Ministero dell'Interno." },
       ],
@@ -191,7 +193,7 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
   dentale: {
     pensando: {
       titolo: ["Chi paga", "il dentista?"],
-      bianca: "Tu. E a volte il conto è una sorpresa.",
+      bianca: "Tu. E non sai mai quanto.",
       blocchi: [
         {
           tipo: "un_numero",
@@ -200,9 +202,9 @@ export const SCHERMATE: Partial<Record<Ramo, Record<Profilo, SchermataPartner>>>
           numero: { colore: "rosa", etichetta: "In media", numero: "462€", sotto: "senza polizza li paghi tu" },
           fonte: "Key-Stone, osservatorio OmniSalus, 2025. 10.880 intervistati.",
         },
-        { tipo: "giallo", icona: "🦷", forte: "L'imprevisto non avvisa.", resto: "Meglio se il conto non è solo tuo." },
+        { tipo: "giallo", icona: "🦷", forte: "È una media: c'è chi spende di più.", resto: "Meglio se il conto non è solo tuo." },
       ],
-      nota: "Ci stai pensando? Bastano 6 dati per i preventivi.",
+      nota: "Ci stai pensando? Bastano pochi dati per i preventivi.",
     },
     ha: {
       titolo: ["Il dentista", "è coperto?"],
