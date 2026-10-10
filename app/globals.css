@@ -52,6 +52,15 @@ body {
   overscroll-behavior: none;
 }
 
+/* Safari, e quindi ogni browser su iPhone e iPad, non sa disegnare Noto Color Emoji:
+   mostra quadrati sfocati. Solo lì si usano le emoji di sistema. Chrome e gli altri
+   browser non entrano in questo blocco e continuano a usare Noto. */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  html:root {
+    --font-emoji: "Apple Color Emoji";
+  }
+}
+
 body {
   background: #f3f5f1;
   color: var(--color-ink);
