@@ -89,7 +89,7 @@ function SchermataPartner() {
   if (!testi) return <Originale ramo={ramo} onConfronta={confronta} onChiudi={chiudi} onHome={home} />;
 
   const secondo = {
-    prosegui: { testo: "Prosegui", azione: () => esci("continue", () => allaLezione("/percorso/lezione?n=3&c=0")) },
+    prosegui: { testo: "Continua a imparare", azione: () => esci("continue", () => allaLezione("/percorso/lezione?n=3&c=0")) },
     percorso: { testo: "Torna al percorso", azione: () => esci("back_to_path", allaMappa) },
     home: { testo: "Torna alla Home", azione: home },
     promemoria: {

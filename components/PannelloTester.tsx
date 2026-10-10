@@ -85,19 +85,21 @@ export function PannelloTester({ onClose }: { onClose: () => void }) {
             >
               Schermata dopo la lezione 2
             </button>
-            {/* Nella realtà il promemoria arriva da solo dopo una settimana. */}
-            <button
-              className="col-span-2 rounded-2xl bg-soft px-2 py-3 disabled:text-ink/30"
-              disabled={progresso.promemoria !== "chiesto"}
-              onClick={() => {
-                impostaPromemoria("arrivato");
-                onClose();
-                toast("Una settimana dopo: promemoria in Home");
-                router.push("/");
-              }}
-            >
-              Fai arrivare il promemoria
-            </button>
+            {/* Nella realtà il promemoria arriva da solo dopo una settimana.
+                La scorciatoia compare solo dopo aver toccato "Ricordamelo". */}
+            {progresso.promemoria === "chiesto" && (
+              <button
+                className="col-span-2 rounded-2xl bg-soft px-2 py-3"
+                onClick={() => {
+                  impostaPromemoria("arrivato");
+                  onClose();
+                  toast("Una settimana dopo: promemoria in Home");
+                  router.push("/");
+                }}
+              >
+                Fai arrivare il promemoria
+              </button>
+            )}
           </>
         )}
       </div>
