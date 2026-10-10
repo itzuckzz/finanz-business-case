@@ -3,12 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useUtente, VUOTO } from "@/components/Providers";
 import { Sheet } from "@/components/ui";
-import { UTENTI, NOME_RAMO } from "@/lib/utenti";
+import { idUtente, INTENTI, RAMI, TITOLO_RAMO } from "@/lib/utenti";
 import { invitoDopoLezione2, PROFILO } from "@/lib/partner";
 import { LEZIONI, PERCORSO } from "@/lib/percorso";
 
 // Strumenti per chi prova il prototipo: non esistono nell'app vera.
-// Cambi utente di prova e salti avanti nel percorso senza rifare tutte le lezioni.
+// Scegli ramo e risposta di onboarding e salti avanti nel percorso senza rifare tutte le lezioni.
 export function PannelloTester({ onClose }: { onClose: () => void }) {
   const { utente, setUtente, progresso, impostaProgresso, impostaPromemoria, toast } = useUtente();
   const router = useRouter();
@@ -29,21 +29,34 @@ export function PannelloTester({ onClose }: { onClose: () => void }) {
     <Sheet onClose={onClose}>
       <p className="text-2xl font-bold">🧪 Utente di prova</p>
       <p className="mt-1 text-sm text-muted">
-        Ognuno ha un ramo e una risposta diversa alla domanda di onboarding &quot;Hai attualmente delle assicurazioni?&quot;.
-        L&apos;avanzamento resta salvato per ogni utente.
+        Ramo e risposta alla domanda di onboarding decidono la schermata partner e l&apos;ingresso in mappa: quindici
+        combinazioni. L&apos;avanzamento resta salvato per ognuna.
       </p>
-      <div className="mt-4 flex max-h-[42dvh] flex-col gap-2 overflow-y-auto">
-        {UTENTI.map((u) => (
+      <p className="mt-4 text-xs font-semibold tracking-wide text-muted uppercase">Ramo</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {RAMI.map((r) => (
           <button
-            key={u.id}
-            onClick={() => setUtente(u.id)}
-            className={`rounded-2xl border-[1.5px] px-4 py-3 text-left transition ${u.id === utente.id ? "border-green-600 bg-soft" : "border-line"}`}
+            key={r}
+            onClick={() => setUtente(idUtente(r, utente.onboarding_intent))}
+            aria-pressed={r === utente.ramo}
+            className={`rounded-full border-[1.5px] px-4 py-2 text-sm font-semibold transition ${r === utente.ramo ? "border-green-600 bg-soft" : "border-line"}`}
           >
-            <span className="font-bold">
-              {u.nome}, {u.eta} anni
-            </span>
-            <span className="text-muted"> · {u.os} · ramo {NOME_RAMO[u.ramo]}</span>
-            <span className="block text-sm">&quot;{u.onboarding_intent}&quot;</span>
+            {TITOLO_RAMO[r]}
+          </button>
+        ))}
+      </div>
+      <p className="mt-4 text-xs font-semibold tracking-wide text-muted uppercase">
+        &quot;Hai attualmente delle assicurazioni?&quot;
+      </p>
+      <div className="mt-2 flex flex-col gap-2">
+        {INTENTI.map((i) => (
+          <button
+            key={i}
+            onClick={() => setUtente(idUtente(utente.ramo, i))}
+            aria-pressed={i === utente.onboarding_intent}
+            className={`rounded-2xl border-[1.5px] px-4 py-2.5 text-left text-sm font-semibold transition ${i === utente.onboarding_intent ? "border-green-600 bg-soft" : "border-line"}`}
+          >
+            {i}
           </button>
         ))}
       </div>

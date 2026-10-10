@@ -38,7 +38,7 @@ Quattro eventi nell'export non esistono e sono stati aggiunti per leggere il tes
 
 La schermata partner si apre in tre punti: dopo il trofeo, dopo la lezione 2 (`?da=lezione2`) e dalla mappa (`?da=mappa`, l'ingresso nella mappa non è ancora disegnato). Il secondo bottone cambia di conseguenza. "Ricordamelo" imposta un promemoria finto: per farlo arrivare in Home c'è la scorciatoia "Fai arrivare il promemoria" nel pannello "Cambia".
 
-Sugli schermi larghi, il pannello a destra mostra gli eventi mentre usi il percorso. Dalla striscia verde in cima alla Home (o dall'avatar) cambi utente di prova: ognuno ha un ramo e una risposta diversa alla domanda di onboarding "Hai attualmente delle assicurazioni?". Lì trovi anche le scorciatoie per ricominciare o saltare al quiz e alla schermata partner. L'avanzamento resta salvato nel browser.
+Sugli schermi larghi, il pannello a destra mostra gli eventi mentre usi il percorso. Dalla striscia verde in cima alla Home (o dall'avatar) cambi utente di prova: scegli il ramo e la risposta alla domanda di onboarding "Hai attualmente delle assicurazioni?", quindici combinazioni in tutto, una per schermata partner. Lì trovi anche le scorciatoie per ricominciare o saltare al quiz e alla schermata partner. L'avanzamento resta salvato nel browser.
 
 ```
 app/page.tsx                     Home

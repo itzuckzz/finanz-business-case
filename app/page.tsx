@@ -7,6 +7,7 @@ import { useUtente } from "@/components/Providers";
 import { BottomNav, ChipStato, Icona } from "@/components/ui";
 import { PannelloTester } from "@/components/PannelloTester";
 import { LEZIONI, PERCORSO } from "@/lib/percorso";
+import { INTENTO_IN_BREVE, TITOLO_RAMO } from "@/lib/utenti";
 
 export default function Home() {
   const { utente, progresso, toast, track, impostaPromemoria } = useUtente();
@@ -27,7 +28,7 @@ export default function Home() {
         className="flex items-center justify-between gap-3 bg-forest px-4 py-2 text-left text-xs text-white"
       >
         <span>
-          🧪 Utente di prova: <b>{utente.nome}</b>, {utente.eta} anni · {utente.os}
+          🧪 Utente di prova: <b>{TITOLO_RAMO[utente.ramo]}</b> · {INTENTO_IN_BREVE[utente.onboarding_intent]}
         </span>
         <span className="shrink-0 font-semibold text-kiwi-400 underline">Cambia</span>
       </button>
