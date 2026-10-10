@@ -2,6 +2,8 @@
 
 Il prototipo del percorso Academy sulle assicurazioni, per il Business Case Finanz.
 
+Online, senza login: https://finanz-business-case-francesco.vercel.app
+
 ## Avvio
 
 ```bash
