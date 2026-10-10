@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUtente } from "@/components/Providers";
-import { Chip, PrimaryButton } from "@/components/ui";
+import { Chip, Icona, PrimaryButton } from "@/components/ui";
 import { PERCORSO, QUIZ } from "@/lib/percorso";
 
 export default function Page() {
@@ -28,8 +28,14 @@ function PercorsoCompletato() {
 
   return (
     <div className="flex flex-1 flex-col bg-forest text-white">
-      {/* Niente X: da qui si prosegue soltanto, verso la schermata partner. */}
-      <div className="flex items-center justify-end px-4 pt-4">
+      <div className="flex items-center justify-between px-4 pt-4">
+        <button
+          onClick={() => router.push("/")}
+          aria-label="Torna alla Home"
+          className="grid size-10 place-items-center rounded-full bg-white/15 transition active:scale-90"
+        >
+          <Icona nome="x" size={22} />
+        </button>
         <div className="flex gap-2 [&>span]:border-white/40">
           <Chip>∞ 💛</Chip>
           <Chip>{kiwi.toLocaleString("it-IT")} 🥝</Chip>
