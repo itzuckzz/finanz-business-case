@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useUtente } from "@/components/Providers";
 import { BottomNav, ChipStato, Icona } from "@/components/ui";
@@ -10,8 +9,7 @@ import { LEZIONI, PERCORSO } from "@/lib/percorso";
 import { INTENTO_IN_BREVE, TITOLO_RAMO } from "@/lib/utenti";
 
 export default function Home() {
-  const { utente, progresso, toast, track, impostaPromemoria } = useUtente();
-  const router = useRouter();
+  const { utente, progresso, toast } = useUtente();
   const [tester, setTester] = useState(false);
 
   const finito = progresso.quiz;
@@ -57,27 +55,6 @@ export default function Home() {
           App
         </button>
       </div>
-
-      {/* Il promemoria chiesto sulla schermata partner con "Ricordamelo". */}
-      {progresso.promemoria === "arrivato" && (
-        <section className="px-4 pt-5">
-          <button
-            onClick={() => {
-              track("Partner Reminder Opened");
-              impostaPromemoria("no");
-              router.push("/percorso/partner?da=promemoria");
-            }}
-            className="flex w-full items-center gap-3 rounded-3xl bg-badge-sondaggio px-4 py-3.5 text-left transition active:scale-[0.98]"
-          >
-            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-2xl">🔔</span>
-            <span className="flex-1 leading-snug">
-              <b className="block">Volevi confrontare le polizze</b>
-              <span className="text-sm text-muted">Ci avevi chiesto di ricordartelo.</span>
-            </span>
-            <span className="font-semibold text-green-600">Apri</span>
-          </button>
-        </section>
-      )}
 
       <section className="px-4 pt-6">
         <div className="overflow-hidden rounded-[28px] bg-gradient-to-b from-forest-deep via-forest-deep to-black px-5 pt-6 pb-5 text-white">
