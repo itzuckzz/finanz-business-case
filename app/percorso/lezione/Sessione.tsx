@@ -44,10 +44,7 @@ function Lezione({ indice, c, vai, esci }: { indice: number; c: number } & Nav) 
   const lezione = LEZIONI[indice];
   const card = lezione.card[Math.min(c, lezione.card.length - 1)];
 
-  const sondaggio = (risposta: string) => {
-    rispondiSondaggio(indice + 1, risposta);
-    track("Survey Answered", { lesson_number: indice + 1, question: card.tipo === "sondaggio" ? card.testo : "", answer: risposta });
-  };
+  const sondaggio = (risposta: string) => rispondiSondaggio(indice + 1, risposta);
 
   const abbandona = () => {
     track("Lesson Exited", { lesson_number: indice + 1, card_number: c + 1, cards_total: lezione.card.length });

@@ -25,7 +25,7 @@ export default function Page() {
 // La schermata che porta al comparatore del partner.
 // Ramo e risposta di onboarding dell'utente scelgono quale versione mostrare.
 function SchermataPartner() {
-  const { caricato, utente, progresso, track, toast, impostaPromemoria } = useUtente();
+  const { caricato, utente, track, toast, impostaPromemoria } = useUtente();
   const router = useRouter();
   const params = useSearchParams();
   const { allaMappa, allaLezione } = useRitornoAllaMappa();
@@ -47,10 +47,8 @@ function SchermataPartner() {
     if (!caricato || tracciato.current) return;
     tracciato.current = true;
     inizio.current = Date.now();
-    // Le risposte ai sondaggi viaggiano con l'evento: servono a leggere il click per preoccupazione dichiarata.
-    const sondaggi = Object.fromEntries(Object.entries(progresso.sondaggi).map(([l, r]) => [`survey_l${l}`, r]));
-    track("Partner Screen Viewed", { screen_version: versione, entry_point: ingresso, ...sondaggi });
-  }, [caricato, track, versione, ingresso, progresso.sondaggi]);
+    track("Partner Screen Viewed", { screen_version: versione, entry_point: ingresso });
+  }, [caricato, track, versione, ingresso]);
 
   // Quanto della schermata è stato visto, in percentuale.
   useEffect(() => {
