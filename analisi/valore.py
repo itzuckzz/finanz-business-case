@@ -98,3 +98,6 @@ tg=u[u.intent.isin([T,G])]
 b2s=tg[C].notna().sum()/len(tg); se2=lettura(len(tg)/2,b2s,'Test 2, click su chi inizia')
 print(f'   {tg[C].notna().sum()} click su {len(tg)} partiti | non funziona sotto +{((1.96+0.8416)-1.96)*se2*100:.1f} punti | completamento oggi {tg[PC].notna().sum()}/{len(tg)} = {tg[PC].notna().mean():.1%} | arriva alla lezione 2 {tg.L2.notna().mean():.1%}')
 print(f'   vedono la schermata partner almeno una volta {tg[V].notna().sum()}/{len(tg)} = {tg[V].notna().mean():.1%}')
+# Quanto valgono in euro le soglie del test 2, e a quanti punti di click corrisponde la stima della sezione 2.
+ec=(g.eur[T]+g.eur[G])/tg[C].notna().sum(); tetto=sum(len(u[u.intent==s])*(1-nb[nb.intent==s][V].notna().mean())*g.eur[s]/g.view[s] for s in [T,G])
+print(f'   ricavo per click dei due gruppi {ec:.2f} € | +1,6 punti: {r(.016*len(tg))} click, {r(.016*len(tg)*ec)} € | stima prudente, metà del tetto: {r(tetto/2/ec)} click, +{tetto/2/ec/len(tg)*100:.1f} punti | tetto {r(tetto)} €: {r(tetto/ec)} click, +{tetto/ec/len(tg)*100:.1f} punti')
