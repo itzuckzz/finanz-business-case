@@ -60,8 +60,6 @@ lib/utenti.ts                    utenti di prova
 lib/track.ts                     tracciamento eventi
 ```
 
-Cambia quello che vuoi: è un punto di partenza, non un vincolo.
-
 ## Analisi
 
 Gli script da cui escono le cifre del PDF sono in [`analisi/`](analisi/), con le istruzioni per lanciarli sull'export.
