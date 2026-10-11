@@ -59,6 +59,10 @@ lib/track.ts                     tracciamento eventi
 
 Cambia quello che vuoi: è un punto di partenza, non un vincolo.
 
+## Analisi
+
+Gli script da cui escono le cifre del PDF sono in [`analisi/`](analisi/), con le istruzioni per lanciarli sull'export.
+
 ## Pubblicare
 
 Il modo più rapido è Vercel: importa il tuo repo da https://vercel.com/new e pubblica. Il link che ti dà Vercel è quello da mandarci.
