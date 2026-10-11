@@ -2,7 +2,10 @@
 
 Il prototipo del percorso Academy sulle assicurazioni, per il Business Case Finanz.
 
-Online, senza login: https://finanz-business-case-francesco.vercel.app
+- Prototipo online, senza login: https://finanz-business-case-francesco.vercel.app
+- Documento (PDF): https://drive.google.com/file/d/1X3F7k-ELUcwXNj0XOF3dBSrQpaGw3Ele/view?usp=sharing
+- Video (Loom, 5 minuti): https://www.loom.com/share/5a360ee9fb97498c802dc3a57830ed58
+- Script di analisi dell'export: cartella [`analisi/`](analisi/)
 
 ## Avvio
 
